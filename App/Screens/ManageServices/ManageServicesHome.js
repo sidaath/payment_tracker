@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Card} from 'react-native-paper';
+import {Button, Card} from 'react-native-paper';
+import { viewAllServices } from '../../ViewModel/Services';
 import { screenAddService, screenEditService } from '../ScreenNames';
 
 class ManageServicesHome extends React.Component {
@@ -21,6 +22,10 @@ class ManageServicesHome extends React.Component {
     }
 
 
+    const peek = async () =>{
+      const res = await viewAllServices()
+      console.log("All Services : \n",res)
+    }
     return (
       <View style={styles.container}>
 
@@ -32,6 +37,7 @@ class ManageServicesHome extends React.Component {
         <Card style={styles.cardButton} onPress={()=>{handlePress("EditService")}}>
           <Card.Title title="Edit Services" />
         </Card>
+        <Button onPress={()=>{peek()}}>Dev View All Services</Button>
       </View>
     );
   }
