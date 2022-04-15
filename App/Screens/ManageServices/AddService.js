@@ -1,6 +1,7 @@
 import React from 'react'
 import {ScrollView, StyleSheet} from 'react-native'
-import { Card, RadioButton, TextInput } from 'react-native-paper'
+import { Button, Card, RadioButton, TextInput } from 'react-native-paper'
+import { saveNewService } from '../../ViewModel/Services'
 
 
 export default function AddService(){
@@ -17,6 +18,45 @@ export default function AddService(){
     const [monthlyErr , setMonthlyEr] = React.useState(false)
     const [showAmtErr , setShowAmtEr] = React.useState(false)
     const [amtErr , setAmtEr] = React.useState(false)
+    //reset errors
+    const resetErrors = ()=>{
+        setNameEr(false)
+        setMonthlyEr(false)
+        setShowAmtEr(false)
+        setAmtEr(false)
+    }
+    //save new service
+    const saveService = async () =>{
+        resetErrors()
+        let error = false
+        if(name === ''){
+            error = true
+            setNameEr(true)
+        }
+
+        if(monthly === null){
+            error = true
+            setMonthlyEr(true)
+        }
+
+        if(showAmount === null){
+            error = true
+            setShowAmtEr(true)
+        }
+
+        if(showAmount && amount===''){
+            error = true
+            setAmtEr(true)
+        }
+
+        if(error) return
+
+        const res = await saveNewService(name,description,monthly,showAmount,amount)
+
+        if(res.result === true){
+            console.log("Success")
+        }
+    }
 
         return(
             <ScrollView>
@@ -76,6 +116,7 @@ export default function AddService(){
                         </Card>
                     </Card.Content>
                 </Card>
+                <Button onPress={()=>{saveService()}}>Add Service</Button>
             </ScrollView>
         )
     }
