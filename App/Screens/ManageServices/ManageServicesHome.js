@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button, Card} from 'react-native-paper';
-import { viewAllServices } from '../../ViewModel/Services';
+import { deleteAll, viewAllServices } from '../../ViewModel/Services';
 import { screenAddService, screenEditService } from '../ScreenNames';
 
 class ManageServicesHome extends React.Component {
@@ -26,6 +26,16 @@ class ManageServicesHome extends React.Component {
       const res = await viewAllServices()
       console.log("All Services : \n",res)
     }
+
+    const del = async ()=>{
+      const res = await deleteAll()
+      if(res.result===true){
+        console.log("Deleted all services")
+      }else{
+        console.log("Failed to delete all services")
+      }
+    }
+
     return (
       <View style={styles.container}>
 
@@ -38,6 +48,7 @@ class ManageServicesHome extends React.Component {
           <Card.Title title="Edit Services" />
         </Card>
         <Button onPress={()=>{peek()}}>Dev View All Services</Button>
+        <Button onPress={()=>{del()}}>Dev Delete All Services</Button>
       </View>
     );
   }

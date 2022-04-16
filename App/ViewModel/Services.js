@@ -1,4 +1,5 @@
 import { addService, getAllServices } from "../Model/Services";
+import { removeAllServices } from "../Model/ServicesDev";
 import ServiceObject from "./ServiceObject";
 
 
@@ -32,5 +33,15 @@ export async function viewAllServices(){
         }else{return []}
     }catch(e){
         console.error("ViewModel Services.js, dev, e",e)
+    }
+}
+
+export async function deleteAll(){
+    try{
+        const res = await removeAllServices()
+        return {result : res.result}
+    }catch(e){
+        console.error("VM Services.js, deleteAll catch ",e)
+        return {result : false}
     }
 }
