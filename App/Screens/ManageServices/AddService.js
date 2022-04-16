@@ -107,7 +107,7 @@ export default function AddService(){
                                     label='Amount'
                                     keyboardType='numeric'
                                     value={amount}
-                                    onChangeValue={(val)=>{setAmount(val)}}
+                                    onChangeText={(val)=>{setAmount(val)}}
                                     error={amtErr}
                                 />
                             
