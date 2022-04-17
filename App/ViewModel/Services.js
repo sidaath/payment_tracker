@@ -36,6 +36,20 @@ export async function saveEditedService(service){
     }
 }
 
+export async function deleteService(service){
+    try{
+        const res = await removeService(service.serviceID)
+        if(res.result === true) return  {result : true}
+        else{
+            if(res.error) return {result : false, error :  res.error}
+        }
+        return {result : false}
+    }catch(e){
+        console.error("VM Services.jsm deleteService, catch ",e)
+        return {result : false}
+    }
+}
+
 
 export async function readAllServices(){
     try{
