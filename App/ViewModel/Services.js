@@ -22,7 +22,8 @@ export async function saveNewService(serviceName, serviceDescription, monthly, f
     return false
 }
 
-export async function saveEditedService(service){
+export async function saveEditedService(serviceName, serviceDescription, monthly, fixedAmount, amount, serviceID){
+    const service = new ServiceObject(serviceName, serviceDescription, monthly, fixedAmount, amount, serviceID)
     try{
         const editResponse = await editService(service)
         if(editResponse.result === true){

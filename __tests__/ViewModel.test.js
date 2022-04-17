@@ -39,8 +39,14 @@ describe('Checking service operations', ()=>{
     test('editing existing service', async()=>{
         const res = await searchServiceByName("s1")
         const service = res.service
-        const editedService = {...service, serviceName : "s1 edited"}
-        const saveRes = await saveEditedService(editedService)
+        const saveRes = await saveEditedService(
+            "s1 edited",
+            service.serviceDescription,
+            service.monthly,
+            service.fixedAmount,
+            service.amount,
+            service.serviceID
+        )
         expect(saveRes.result).toBe(true)
 
         const savedService = await searchServiceByName("s1 edited")

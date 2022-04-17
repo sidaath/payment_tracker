@@ -1,11 +1,20 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {ScrollView, StyleSheet} from 'react-native'
 import { Button, Card, RadioButton, TextInput } from 'react-native-paper'
-import { saveNewService } from '../../ViewModel/Services'
+import { saveNewService, saveEditedService } from '../../ViewModel/Services'
+import { screenEditService } from '../ScreenNames'
 
 
-export default function AddService(){
-
+export default function AddService({navigation, route}){
+    useEffect(()=>{
+        if(route.params?.edit){
+            setName(route.params.edit.serviceName)
+            setDescription(route.params.edit.serviceDescription)
+            setMonthly(route.params.edit.monthly)
+            setShowAmt(route.params.edit.fixedAmount)
+            setAmount(route.params.edit.amount)
+        }
+    }, [route?.params?.edit])
     //user input
     const [name, setName] = React.useState('')
     const [description, setDescription] = React.useState('')
@@ -51,12 +60,37 @@ export default function AddService(){
 
         if(error) return
 
-        const res = await saveNewService(name,description,monthly,showAmount,amount)
 
-        if(res.result === true){
-            console.log("Success")
+        if(route.params?.edit){
+            const response = await modifyExisting()
+            response ? console.log("Success - modify") : console.error("Failure to modify")
+            navigation.navigate(screenEditService, {
+                reload : true
+            })
+        }else{
+            const response = await addNewService()
+            response?console.log("Success - new service") : console.error("Failure to add new")
         }
     }
+
+    const addNewService = async () =>{
+        const response = await saveNewService(name,description,monthly,showAmount,amount)
+        if(response.result === true){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    const modifyExisting = async () =>{
+        const response = await saveEditedService(name,description,monthly,showAmount,amount, route.params.edit.serviceID)
+        if(response.result === true){
+            return true
+        }else{
+            return false
+        }
+    }
+
 
         return(
             <ScrollView>
@@ -116,7 +150,7 @@ export default function AddService(){
                         </Card>
                     </Card.Content>
                 </Card>
-                <Button onPress={()=>{saveService()}}>Add Service</Button>
+                <Button onPress={()=>{saveService()}}>Save Service</Button>
             </ScrollView>
         )
     }

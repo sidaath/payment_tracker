@@ -2,6 +2,7 @@ import React from 'react'
 import {View,ScrollView,Text, StyleSheet} from 'react-native'
 import { ActivityIndicator, Button, Card, Dialog, Paragraph, Portal, Provider } from 'react-native-paper'
 import { deleteService, readAllServices } from '../../ViewModel/Services'
+import { screenAddService } from '../ScreenNames'
 
 class EditService extends React.Component{
     constructor(props){
@@ -22,8 +23,7 @@ class EditService extends React.Component{
 
     async componentDidUpdate(){
         console.log("Edit Service Update")
-        if(this.state.reload === true){
-            const readServices = await readAllServices()
+        const updateScreen = (readServices)=>{
             if(readServices.result === true){
                 this.setState({
                     services : readServices.services,
@@ -47,11 +47,21 @@ class EditService extends React.Component{
                     })
                 }
             }
+        } 
+        if(this.state.reload === true){
+            const readServices = await readAllServices()
+            updateScreen(readServices)
+        }
+
+        if(this.props.route?.params?.reload === true){
+            this.props.route.params.reload = false
+            const readServices = await readAllServices()
+            updateScreen(readServices)
         }
     }
 
     render(){
-        console.log("Edit Service Render : services : \n", this.state.services)
+        const nav = this.props.navigation
 
         const showDialog = (service)=>{
             this.setState({showDialog : true, serviceToRemove : service})
@@ -73,6 +83,12 @@ class EditService extends React.Component{
                 errorMsg = response.error
             }
             this.setState({showDialog : false,  serviceToRemove : null, reload :true, loading : true })
+        }
+
+        const editSelectedService = (service)=>{
+            nav.navigate(screenAddService, {
+                edit : service
+            })
         }
 
         if(this.state.loading === true){
@@ -119,7 +135,7 @@ class EditService extends React.Component{
                                 </Card.Content>
                                 <Card.Actions style={{justifyContent :'flex-end'}}>
                                     <Button onPress={()=>{showDialog(service)}}>Delete</Button>
-                                    <Button>Edit</Button>
+                                    <Button onPress={()=>{editSelectedService(service)}}>Edit</Button>
                                 </Card.Actions>
                             </Card>
                         )
