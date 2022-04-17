@@ -29,15 +29,39 @@ export async function addService(newService){
     }
 }
 
+export async function editService(editedService){
+    const id = editedService.serviceID
+    try{
+        const servicesJSON = await AsyncStorage.getItem(SERVICES)
+        if(servicesJSON === null){
+            return {result : false, error : "No services saved."}
+        }
+        const services = JSON.parse(servicesJSON)
+        const isRequiredService = (element) => element.serviceID === id
+        const index = services.findIndex(isRequiredService)
+        if(isNaN(index) || index === -1) return {result : false, error : "Service not found."}
+        services[index] = editedService
+        await AsyncStorage.setItem(SERVICES, JSON.stringify(services))
+        return {result : true, index : index}
+    }catch(e){
+        console.error("Services.js, editService, catch : ",e)
+        return {result : false}
+    }
+}
+
 export async function findService(serviceName){
     try{
         const servicesJSON = await AsyncStorage.getItem(SERVICES)
         if(servicesJSON === null){
-            return {result : false}
+            return {result : false, error : "No saved services."}
         }else{
             const storedServices = JSON.parse(servicesJSON)
             const requiredService = storedServices.filter((item)=> item.serviceName === serviceName)
-            return {result : true, service : requiredService[0]}
+            if(requiredService.length === 0){
+                return {result : false, error : "Could not find service."}
+            }else{
+                return {result : true, service : requiredService[0]}
+            }
         }
     }catch(e){
         console.error("Services.js, findService, catch : ",e)
@@ -55,6 +79,21 @@ export async function getAllServices(){
         }
     }catch(e){
         console.error("Services.js, getAllServices, catch : ",e)
+        return {result : false}
+    }
+}
+
+
+export async function removeService(serviceID){
+    try{
+        const savedServicesJSON = await AsyncStorage.getItem(SERVICES)
+        if(savedServicesJSON === null) return {result : false, error : "No services saved."}
+        const savedServices = JSON.parse(savedServicesJSON)
+        const newServices = savedServices.filter((service)=>service.serviceID !== serviceID)
+        await AsyncStorage.setItem(SERVICES, JSON.stringify(newServices))
+        return {result : true}
+    }catch(e){
+        console.error("Services.js, removeService, catch : ",e)
         return {result : false}
     }
 }
