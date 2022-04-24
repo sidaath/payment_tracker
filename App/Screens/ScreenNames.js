@@ -6,3 +6,7 @@ export const screenPaymentHistory = "PaymentHistoryHome"
 //Manage Service screen options
 export const screenAddService = "AddService"
 export const screenEditService = "EditService"
+
+
+//Payments
+export const screenMakePayment = 'MakePayment'
