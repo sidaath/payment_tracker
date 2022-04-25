@@ -4,7 +4,7 @@ import {StyleSheet } from 'react-native'
 import { paymentMethods } from '../../../ViewModel/PaymentMethods';
 
 
-export default function PickMethod({paymentMethod, setPaymentMethod}){
+export default function PickMethod({paymentMethod, setPaymentMethod, error}){
     const [show, setShow] = React.useState(false)
     const openMenu = () => setShow(true);
 
@@ -15,12 +15,12 @@ export default function PickMethod({paymentMethod, setPaymentMethod}){
 
     return (
         <>
-            <Title>Payment Method</Title>
+            <Title style={{marginTop:40}}>Payment Method</Title>
             <Menu
                 style={styles.menu} 
                 visible={show} 
                 onDismiss={()=>{setShow(false)}} 
-                anchor={<Button mode='outlined' onPress={openMenu}>{paymentMethod ? paymentMethod : 'Select Method'}</Button>}
+                anchor={<Button mode='contained' onPress={openMenu} color={error ? 'red' : null}>{paymentMethod ? paymentMethod : 'Select Method'}</Button>}
             >
                 {paymentMethods.map((method)=>{
                     return(

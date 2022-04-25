@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native'
 import { Button,  Menu, Title } from 'react-native-paper'
 import { months } from '../../../ViewModel/Months'
 
-export default function PickMonth({month, setMonth}){
+export default function PickMonth({month, setMonth, error}){
     const [show, setShow] = React.useState(false)
     const openMenu = () => setShow(true);
 
@@ -19,7 +19,7 @@ export default function PickMonth({month, setMonth}){
                 style={styles.menu} 
                 visible={show} 
                 onDismiss={()=>{setShow(false)}} 
-                anchor={<Button mode='outlined' onPress={openMenu}>{month ? month : 'Pick Month'}</Button>}>
+                anchor={<Button mode='contained' onPress={openMenu} color={error? 'red' : null}>{month ? month : 'Pick Month'}</Button>}>
                 {months.map((month)=>{
                 return(
                     <Menu.Item title={month} onPress={() => {selectMonth(month)}} key={month} />
