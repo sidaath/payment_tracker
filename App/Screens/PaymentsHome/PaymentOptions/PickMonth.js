@@ -19,9 +19,8 @@ export default function PickMonth({month, setMonth}){
                 style={styles.menu} 
                 visible={show} 
                 onDismiss={()=>{setShow(false)}} 
-                anchor={<Button mode='outlined' onPress={openMenu}>{month}</Button>}>
+                anchor={<Button mode='outlined' onPress={openMenu}>{month ? month : 'Pick Month'}</Button>}>
                 {months.map((month)=>{
-                console.log(month)
                 return(
                     <Menu.Item title={month} onPress={() => {selectMonth(month)}} key={month} />
                 )
