@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import {ScrollView, StyleSheet} from 'react-native'
-import { Button, Card, RadioButton, TextInput } from 'react-native-paper'
+import { ActivityIndicator, Button, Card, RadioButton, Snackbar, TextInput } from 'react-native-paper'
 import { saveNewService, saveEditedService } from '../../ViewModel/Services'
 import { screenEditService } from '../ScreenNames'
 
@@ -15,12 +15,20 @@ export default function AddService({navigation, route}){
             setAmount(route.params.edit.amount)
         }
     }, [route?.params?.edit])
+
+    //loading
+    const[loading, setLoading] = React.useState(false)
+
     //user input
     const [name, setName] = React.useState('')
     const [description, setDescription] = React.useState('')
     const [monthly, setMonthly] = React.useState(null)
     const [showAmount, setShowAmt] = React.useState(null)
     const [amount, setAmount] = React.useState('')
+
+    //snackbar
+    const [snackbarSuccess, setSucces] = React.useState(false)
+    const [snackbarFailure, setFailure] = React.useState(false)
 
     //errors
     const [nameErr , setNameEr] = React.useState(false)
@@ -58,9 +66,12 @@ export default function AddService({navigation, route}){
             setAmtEr(true)
         }
 
-        if(error) return
+        if(error){
+            setFailure(true)
+            return
+        }
 
-
+        setLoading(true)
         if(route.params?.edit){
             const response = await modifyExisting()
             response ? console.log("Success - modify") : console.error("Failure to modify")
@@ -69,8 +80,15 @@ export default function AddService({navigation, route}){
             })
         }else{
             const response = await addNewService()
-            response?console.log("Success - new service") : console.error("Failure to add new")
+            response?setSucces(true) : setFailure(true)
         }
+
+        setName('')
+        setDescription('')
+        setAmount('')
+        setMonthly(null)
+        setShowAmt(null)
+        setLoading(false)
     }
 
     const addNewService = async () =>{
@@ -89,6 +107,12 @@ export default function AddService({navigation, route}){
         }else{
             return false
         }
+    }
+
+    if(loading) {
+        return(
+            <ActivityIndicator size='large' style={{top : 30}}/>
+        )
     }
 
 
@@ -151,6 +175,28 @@ export default function AddService({navigation, route}){
                     </Card.Content>
                 </Card>
                 <Button onPress={()=>{saveService()}}>Save Service</Button>
+
+                <Snackbar 
+                    visible={snackbarSuccess} 
+                    onDismiss={()=>{setSucces(false)}}
+                    action={{
+                        label : 'OK',
+                        onPress : () =>{setSucces(false)}
+                    }}
+                    >
+                    Added service succesfully
+                </Snackbar>
+
+                <Snackbar 
+                    visible={snackbarFailure} 
+                    onDismiss={()=>{setFailure(false)}}
+                    action={{
+                        label : 'OK',
+                        onPress : () =>{setFailure(false)}
+                    }}
+                    >
+                    Failed to add service. Check if required fields have data.
+                </Snackbar>
             </ScrollView>
         )
     }

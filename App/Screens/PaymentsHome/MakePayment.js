@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {Button, Provider, Surface, Title} from 'react-native-paper';
+import {ActivityIndicator, Button, Provider, Snackbar, Surface, Title} from 'react-native-paper';
 import PaymentObject from '../../ViewModel/PaymentObject';
 import {markPayment} from '../../ViewModel/Payments';
 import PickAmount from './PaymentOptions/PickAmount';
@@ -13,6 +13,13 @@ export default function MakePayment({navigation, route}) {
     route.params?.service ? route.params.service : null,
   );
 
+  //loading
+  const [loading, setLoading] = React.useState(false)
+
+  //snackbars
+  const [snackbarSuccess, setSucces] = React.useState(false)
+  const [snackbarFailure, setFailure] = React.useState(false)
+
   //data for payment object
   const [month, setMonth] = React.useState(null);
   const [date, setDate] = React.useState(null);
@@ -20,6 +27,13 @@ export default function MakePayment({navigation, route}) {
     service.amount ? service.amount : null,
   );
   const [paymentMethod, setPaymentMethod] = React.useState(null);
+
+  function resetFields(){
+    setMonth(null)
+    setDate(null)
+    setPaymentMethod(null)
+    setAmount(service.amount ? service.amount : null)
+  }
 
   //error handling
   const [amountError, setAmountError] = React.useState(false);
@@ -35,6 +49,7 @@ export default function MakePayment({navigation, route}) {
   }
 
   const savePayment = async () => {
+    setLoading(true)
     resetErrors();
     let monthE,
       dateE,
@@ -69,6 +84,7 @@ export default function MakePayment({navigation, route}) {
       if (dateE) setDateError(true);
       if (amountE) setAmountError(true);
       if (methodE) setMethodError(true);
+      setLoading(false)
       return;
     }
 
@@ -79,14 +95,23 @@ export default function MakePayment({navigation, route}) {
       month,
       paymentMethod,
     );
-
+    
     const res = await markPayment(service.serviceName, payment);
     if (res.result === true) {
-      console.log('success');
+      setLoading(false)
+      setSucces(true);
     } else {
-      console.log('Failed to save payment');
+      setLoading(false)
+      setFailure(true);
     }
+    resetFields()
   };
+
+  if(loading){
+    return(
+      <ActivityIndicator size='large' style={{top : 30}}/>
+    )
+  }
 
   return (
     <Provider>
@@ -125,6 +150,29 @@ export default function MakePayment({navigation, route}) {
               Save Payment
             </Button>
           </Surface>
+
+          <Snackbar 
+            visible={snackbarSuccess}
+            onDismiss={()=>setSucces(false)}
+            action={{
+              label :'OK',
+              onPress : ()=>{setSucces(false)}
+            }}
+            >
+            Success
+          </Snackbar>
+
+          <Snackbar 
+            visible={snackbarFailure}
+            onDismiss={()=>setFailure(false)}
+            action={{
+              label :'OK',
+              onPress : ()=>{setFailure(false)}
+            }}
+            >
+            Failed to save payment.
+          </Snackbar>
+
           </ScrollView>
     </Provider>
   );
