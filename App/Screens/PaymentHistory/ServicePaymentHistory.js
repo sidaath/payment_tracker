@@ -96,7 +96,6 @@ export default function ServicePaymentHistory({route, navigation}){
             </DataTable.Header>
 
             {payments.map((payment)=>{
-                console.log(payment)
                 return(
                     <DataTable.Row key={payment.paymentID}>
                         <DataTable.Cell>{payment.dateOfPayment ? payment.dateOfPayment : payment.billingMonth}</DataTable.Cell>

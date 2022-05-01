@@ -72,14 +72,7 @@ export default function MakePayment({navigation, route}) {
     }
 
     if (monthE || dateE || amountE || methodE) {
-      console.log('Error');
-      console.log(
-        'Errors :\n month\tdate\tamount\tmethod\n',
-        monthE,
-        dateE,
-        amountE,
-        methodE,
-      );
+
       if (monthE) setMonthError(true);
       if (dateE) setDateError(true);
       if (amountE) setAmountError(true);

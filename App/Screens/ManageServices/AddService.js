@@ -74,7 +74,7 @@ export default function AddService({navigation, route}){
         setLoading(true)
         if(route.params?.edit){
             const response = await modifyExisting()
-            response ? console.log("Success - modify") : console.error("Failure to modify")
+            response ? setSucces(true) : setFailure(true)
             navigation.navigate(screenEditService, {
                 reload : true
             })

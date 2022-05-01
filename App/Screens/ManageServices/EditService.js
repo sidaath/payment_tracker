@@ -11,7 +11,6 @@ class EditService extends React.Component{
     }
 
     async componentDidMount(){  
-        console.log("Edit Service mount")
         const readResult = await readAllServices()
         if(readResult.result === true){
             this.setState({services : readResult.services, loading : false})
@@ -22,7 +21,6 @@ class EditService extends React.Component{
     }
 
     async componentDidUpdate(){
-        console.log("Edit Service Update")
         const updateScreen = (readServices)=>{
             if(readServices.result === true){
                 this.setState({
@@ -65,7 +63,6 @@ class EditService extends React.Component{
 
         const showDialog = (service)=>{
             this.setState({showDialog : true, serviceToRemove : service})
-            console.log(service)
         }
 
         const closeDialog = () =>{
@@ -77,7 +74,6 @@ class EditService extends React.Component{
             let success, errorMsg = false
             if(response.result===true){
                 success = true
-                console.log("success removing service")
             }
             if(response.error){
                 errorMsg = response.error
