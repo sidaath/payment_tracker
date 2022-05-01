@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {ScrollView} from 'react-native'
-import { ActivityIndicator, Card, Title } from 'react-native-paper'
+import { ActivityIndicator, Card, DataTable, Title } from 'react-native-paper'
 import { getPayments } from '../../ViewModel/Payments'
 
 export default function ServicePaymentHistory({route, navigation}){
@@ -36,13 +36,24 @@ export default function ServicePaymentHistory({route, navigation}){
 
     return(
         <ScrollView>
+        <DataTable>
+            <DataTable.Header>
+            <DataTable.Title>Date</DataTable.Title>
+            <DataTable.Title>Method</DataTable.Title> 
+            <DataTable.Title numeric>Amount</DataTable.Title>
+            </DataTable.Header>
+
             {payments.map((payment)=>{
+                console.log(payment)
                 return(
-                    <Card key={payment.paymentID}>
-                        <Card.Title title={payment.paymentID} />
-                    </Card>
+                    <DataTable.Row key={payment.paymentID}>
+                        <DataTable.Cell>{payment.dateOfPayment ? payment.dateOfPayment : payment.billingMonth}</DataTable.Cell>
+                        <DataTable.Cell>{payment.paymentMethod}</DataTable.Cell>
+                        <DataTable.Cell numeric>{payment.paymentAmount}</DataTable.Cell>
+                    </DataTable.Row>
                 )
             })}
+        </DataTable>
         </ScrollView>
     )
 
