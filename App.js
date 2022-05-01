@@ -19,13 +19,13 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Home'>
-        <Stack.Screen name='Home' component={Home} />
-        <Stack.Screen name={`${screenManageServices}`} component={ManageServicesHome} />
-        <Stack.Screen name={`${screenPaymentsHome}`} component={PaymentsHome} />
-        <Stack.Screen name={`${screenPaymentHistory}`} component={PaymentHistoryHome} />
-        <Stack.Screen name={`${screenAddService}`} component={AddService} />
-        <Stack.Screen name={`${screenEditService}`} component={EditService} />
-        <Stack.Screen name={screenMakePayment} component={MakePayment} />
+        <Stack.Screen name='Home' component={Home}/>
+        <Stack.Screen name={`${screenManageServices}`} options={{title:'Manage Services'}} component={ManageServicesHome} />
+        <Stack.Screen name={`${screenPaymentsHome}`} options={{title:'Mark Payment'}} component={PaymentsHome} />
+        <Stack.Screen name={`${screenPaymentHistory}`} options={{title:'Payment Records'}} component={PaymentHistoryHome} />
+        <Stack.Screen name={`${screenAddService}`} options={{title:'Add New Service'}} component={AddService} />
+        <Stack.Screen name={`${screenEditService}`} options={{title:'Edit Service'}} component={EditService} />
+        <Stack.Screen name={screenMakePayment} options={{title:'Add Payment Record'}} component={MakePayment} />
         <Stack.Screen name={screenServicePaymentHistory} component={ServicePaymentHistory} />
       </Stack.Navigator>
     </NavigationContainer>

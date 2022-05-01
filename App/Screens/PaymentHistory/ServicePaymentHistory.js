@@ -15,6 +15,11 @@ export default function ServicePaymentHistory({route, navigation}){
     const [delName, setName] = useState(null)
     const [delID, setID] = useState(null)
 
+    useEffect(()=>{
+        navigation.setOptions({
+            title : route.params.service.serviceName
+        })
+    },[navigation])
 
     useEffect(()=>{
         async function fetchData(){
