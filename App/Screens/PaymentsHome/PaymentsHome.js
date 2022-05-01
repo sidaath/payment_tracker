@@ -1,19 +1,22 @@
 import React from "react";
 import {ScrollView} from 'react-native'
-import { ActivityIndicator, Card } from "react-native-paper";
+import { ActivityIndicator, Card, Title } from "react-native-paper";
 import { readAllServices } from "../../ViewModel/Services";
 import { screenMakePayment } from "../ScreenNames";
 
 class PaymentsHome extends React.Component{
     constructor(props){
         super(props)
-        this.state = {loading : true, services : false}
+        this.state = {loading : true, services : false, error : false}
     }
 
     async componentDidMount(){
         const servicesResponse = await readAllServices()
         if(servicesResponse.result === true){
             this.setState({services : servicesResponse.services, loading : false})
+        }
+        if(servicesResponse.result === false && servicesResponse.error){
+            this.setState({error : true, loading : false, errorMsg :servicesResponse.error })
         }
     }
 
@@ -35,7 +38,13 @@ class PaymentsHome extends React.Component{
             })
         }
 
-        if(!this.state.services){ return <ActivityIndicator />}
+        if(this.state.loading){ return <ActivityIndicator />}
+
+        if(this.state.error){
+            return(
+                <Title>{this.state.errorMsg}</Title>
+            )
+        }
 
         return(
             <ScrollView>
