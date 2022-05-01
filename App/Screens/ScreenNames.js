@@ -10,3 +10,4 @@ export const screenEditService = "EditService"
 
 //Payments
 export const screenMakePayment = 'MakePayment'
+export const screenServicePaymentHistory = 'PaymentHistory'
