@@ -1,3 +1,4 @@
+import { eraseServicePayments } from "../Model/Payments";
 import { addService, editService, findService, getAllServices, removeService } from "../Model/Services";
 import { removeAllServices } from "../Model/ServicesDev";
 import ServiceObject from "./ServiceObject";
@@ -40,7 +41,9 @@ export async function saveEditedService(serviceName, serviceDescription, monthly
 export async function deleteService(service){
     try{
         const res = await removeService(service.serviceID)
-        if(res.result === true) return  {result : true}
+        const paymentsRes = await eraseServicePayments(service.serviceName)
+        //check if both succeeded, or one succeeded
+        if(res.result === true && paymentsRes.result === true) return  {result : true}
         else{
             if(res.error) return {result : false, error :  res.error}
         }

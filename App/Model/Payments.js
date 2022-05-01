@@ -77,3 +77,15 @@ export async function readAllPayments(serviceName){
     }
 }
 
+
+export async function eraseServicePayments(serviceName){
+    const PAYMENT_KEY = paymentsKey(serviceName)
+    try{
+        await AsyncStorage.removeItem(PAYMENT_KEY)
+        return {result : true}
+    }catch(e){
+        console.error("Payments.js, eraseServicePayments, catch ",e)
+        return {result : false}
+    }
+}
+
