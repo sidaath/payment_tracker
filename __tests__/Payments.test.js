@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { alterSavedPayment, erasePayment, savePaymentToStorage } from "../App/Model/Payments"
+import { alterSavedPayment, erasePayment, readAllPayments, savePaymentToStorage } from "../App/Model/Payments"
 import PaymentObject from "../App/ViewModel/PaymentObject"
 
 describe('Payment CRUD operations on disk', ()=>{
@@ -23,6 +23,13 @@ describe('Payment CRUD operations on disk', ()=>{
         const val = [newPayment, payment2, payment3]
         await savePaymentToStorage('TestService', payment3)
         expect(AsyncStorage.setItem).toBeCalledWith(`TestService-payments`, JSON.stringify(val))
+    })
+
+    test('All payments are returned properly when read from disk', async ()=>{
+        const array = [newPayment, payment2, payment3]
+        const response = await readAllPayments('TestService')
+        console.log(response)
+        expect(response.payments).toEqual(array)
     })
 
     test('A payment is edited succesfully', async ()=>{

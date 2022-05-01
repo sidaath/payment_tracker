@@ -62,3 +62,18 @@ export async function erasePayment(serviceName, paymentID){
     }
 }
 
+export async function readAllPayments(serviceName){
+    const PAYMENTS_KEY = paymentsKey(serviceName)
+    try{
+        const savedPaymentsJSON = await AsyncStorage.getItem(PAYMENTS_KEY)
+        if(savedPaymentsJSON === null){
+            return {result : false, error : "No saved payments found"}
+        }else{
+            return {result : true, payments : JSON.parse(savedPaymentsJSON)}
+        }
+    }catch(e){
+        console.error("Payments.js, readAllPayments , catch ",e)
+        return {result : false}
+    }
+}
+
