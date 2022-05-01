@@ -1,4 +1,4 @@
-import { readAllPayments, savePaymentToStorage } from "../Model/Payments"
+import { erasePayment, readAllPayments, savePaymentToStorage } from "../Model/Payments"
 
 export const markPayment = async (serviceName, payment) => {
     try{
@@ -27,6 +27,20 @@ export const getPayments = async(serviceName)=>{
         }
     }catch(e){
         console.error("VM Payments.js, getPayments, catch ",e)
+        return {result : false}
+    }
+}
+
+export const deletePayment = async (serviceName,paymentID) =>{
+    try{
+        const res = await erasePayment(serviceName, paymentID)
+        if(res.result===true){
+            return {result : true}
+        }else{
+            return {result : false}
+        }
+    }catch(e){
+        console.error("VM Payments.js, deletePayment, catch ",e)
         return {result : false}
     }
 }
