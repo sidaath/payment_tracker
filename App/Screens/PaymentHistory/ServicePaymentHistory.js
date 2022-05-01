@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import {ScrollView} from 'react-native'
-import { ActivityIndicator, Card } from 'react-native-paper'
+import { ActivityIndicator, Card, Title } from 'react-native-paper'
 import { getPayments } from '../../ViewModel/Payments'
 
 export default function ServicePaymentHistory({route, navigation}){
     
     const [loading, setLoading] = useState(true)
     const [payments, setPayments] = useState([])
+    const [errorMsg, setErrorMsg] = useState(null)
 
     useEffect(()=>{
         async function fetchData(){
@@ -15,12 +16,22 @@ export default function ServicePaymentHistory({route, navigation}){
                 setPayments(paymentsRes.payments)
                 setLoading(false)
             }
+            if(paymentsRes.result === false && paymentsRes.error){
+                setErrorMsg(paymentsRes.error)
+                setLoading(false)
+            }
         }
         fetchData()
     }, [])
     
     if(loading){
         return (<ActivityIndicator />)
+    }
+
+    if(errorMsg){
+        return(
+            <Title>{errorMsg}</Title>
+        )
     }
 
     return(
